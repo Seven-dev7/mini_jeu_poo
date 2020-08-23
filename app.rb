@@ -2,4 +2,7 @@ require 'bundler'
 Bundler.require
 
 $:.unshift File.expand_path("./../lib", __FILE__)
-require ''
+require 'game'
+require 'player'
+
+binding.pry
