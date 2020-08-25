@@ -4,7 +4,7 @@ class Player
 
     def initialize(name)
         @name = name
-        @life_points = 100
+        @life_points = 20
     end
 
     def show_state
@@ -20,13 +20,56 @@ class Player
         end
     end
 
-    def attacks(a=[])
-        puts "le joueur #{self.name} attaque le joueur #{a.name} et lui inflige #{dmg = compute_damage} dégats."
-		a.get_damage(dmg)
+    def attacks(attacked_player)
+        puts "le joueur #{self.name} attaque le joueur #{attacked_player.name} et lui inflige #{dmg = compute_damage} dégats."
+        attacked_player.get_damage(dmg)
     end
 
     def compute_damage
         return rand(1..6)
     end
     
+end
+
+class HumanPlayer < Player
+    
+    attr_accessor :weapon_level
+
+    def initialize(name)
+        @name = name
+        @life_points = 100
+        @weapon_level = 1
+    end
+
+    def show_state
+        puts "#{@name} a #{@life_points} points de vie et une arme de niveau #{@weapon_level}"
+    end
+
+    def compute_damage
+        rand(1..6) * @weapon_level
+    end
+
+    def search_weapon
+        result_rand = rand(1..6)
+        if result_rand > @weapon_level
+            @weapon_level = result_rand
+            p "Je garde cette arme qui est de niveau #{@weapon_level}, soit plus puissante que l'ancienne"
+        else 
+            p "Zut cette arme n'est pas plus puissante que l'ancienne"
+        end
+    end
+
+    def search_health_pack
+        result_rand = rand(1..6)
+        if result_rand == 1
+            p "Tu n'as rien trouvé"
+        elsif result_rand == 6
+            @life_points += 80
+            @life_points = 100 if @life_points > 100
+        else 
+            @life_points += 50
+            @life_points = 100 if @life_points > 100
+        end
+        
+    end
 end
