@@ -26,7 +26,6 @@ player1 = Player.new("josiane")
 p "Ici #{player1.name}"
 player2 = Player.new("jose")
 [player1, player2].each { |p| ennemies << p }
-p ennemies.to_s
 p "Voila #{player2.name}"
 while user.life_points > 0 && (player1.life_points > 0 || player2.life_points > 0 )
     user.show_state
@@ -34,8 +33,11 @@ while user.life_points > 0 && (player1.life_points > 0 || player2.life_points > 
     p "a - chercher une meilleure arme"
     p "s - chercher à se soigner"
     p "attaquer un joueur en vue :"
-    p "1 - #{player1.show_state} "
-    p "0 - #{player2.show_state} "
+    print "0 - Attaquer "
+    player1.show_state
+    print "1 - Attaquer " 
+    player2.show_state
+    print ">"
     input_menu = gets.chomp.to_s 
     case 
     when input_menu == 'a'
@@ -49,8 +51,12 @@ while user.life_points > 0 && (player1.life_points > 0 || player2.life_points > 
     else 
         p "Veuillez taper uniquement les valeurs indiquées"
     end
-    puts "Les autres joueurs t'attaquent !"
-    ennemies.each { |ennemy| ennemy.attacks(user)}
+    ennemies.each do |ennemy|
+        if ennemy.life_points > 0
+        puts "#{ennemy.name} attaque #{user.name}"
+        ennemy.attacks(user)
+        end
+    end
 end
 p "La partie est fini"
 if user.life_points <= 0
