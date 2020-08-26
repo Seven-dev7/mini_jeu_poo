@@ -53,7 +53,7 @@ class HumanPlayer < Player
         result_rand = rand(1..6)
         if result_rand > @weapon_level
             @weapon_level = result_rand
-            p "Je garde cette arme qui est de niveau #{@weapon_level}, soit plus puissante que l'ancienne"
+            p "J'ai trouvé une arme de niveau #{@weapon_level}. Je la garde, car elles est plus puissante que l'ancienne"
         else 
             p "Zut cette arme n'est pas plus puissante que l'ancienne"
         end

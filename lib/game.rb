@@ -15,17 +15,11 @@ class Game
     end
 
     def kill_player
-        @ennemies.delete(@ennemies.last)
-        p @ennemies
-=begin
         @ennemies.each do |e|
             if e.life_points <= 0
-                @ennemies - [e]
-                p "#{e.name} est mort"
-                p @ennemies.inspect
+                @ennemies = @ennemies - [e]
             end
         end
-=end
     end
 
     def is_still_ongoing?
@@ -37,7 +31,7 @@ class Game
     end
 
     def show_players
-        p "Notre joueur dispose de #{@human_player.life_points} points de vie"
+        p "#{@human_player.name} dispose de #{@human_player.life_points} points de vie"
         p "Il reste encore #{@ennemies.count} bots en vie"
     end
 
@@ -55,14 +49,31 @@ class Game
         p "a - chercher une meilleure arme"
         p "s - chercher à se soigner"
         p "attaquer un joueur en vue :"
-        p "0 - Attaquer #{@ennemies[0].name}"
-        p "1 - Attaquer #{@ennemies[1].name}"
-        p "2 - Attaquer #{@ennemies[2].name}"
-        p "3 - Attaquer #{@ennemies[3].name}"
+        if @ennemies[0].nil?
+            p " Ce bot est mort"
+        else
+            p "0 - Attaquer #{@ennemies[0].name}"
+        end
+        if @ennemies[1].nil?
+            p " Ce bot est mort"
+        else
+            p "1 - Attaquer #{@ennemies[1].name}"
+        end
+        if @ennemies[2].nil?
+            p " Ce bot est mort"
+        else
+            p "2 - Attaquer #{@ennemies[2].name}"
+        end
+        if @ennemies[3].nil?
+            p " Ce bot est mort"
+        else
+            p "3 - Attaquer #{@ennemies[3].name}"
+        end
     end
 
     def menu_choice
         while @human_player.life_points > 0 && (@ennemies[0].life_points > 0 || @ennemies[1].life_points > 0 || @ennemies[2].life_points > 0 || @ennemies[3].life_points > 0)
+            menu
             input_menu = gets.chomp.to_s 
             case 
             when input_menu == 'a'
@@ -71,24 +82,37 @@ class Game
                 @human_player.search_health_pack
             when input_menu == '0'
                 @human_player.attacks(@ennemies[0])
+                kill_player
+                show_players
+                ennemies_attack
             when input_menu == '1'
                 @human_player.attacks(@ennemies[1])
+                kill_player
+                show_players
+                ennemies_attack
             when input_menu == '2'
                 @human_player.attacks(@ennemies[2])
+                kill_player
+                show_players
+                ennemies_attack
             when input_menu == '3'
                 @human_player.attacks(@ennemies[3])
-            else 
-                p "Veuillez taper uniquement les valeurs indiquées"
-            end
-            @ennemies.each do |ennemy|
-                if ennemy.life_points > 0
-                puts "#{ennemy.name} attaque #{@human_player.name}"
-                ennemy.attacks(@human_player)
-                end
+                kill_player
+                show_players
+                ennemies_attack
+            else
+                p "Tous les bots sont mort"
             end
         end
     end
 
+    def ennemies_attack
+        @ennemies.each do |ennemy|
+            if ennemy.life_points > 0
+            ennemy.attacks(@human_player)
+            end
+        end
+    end
 
     private
 
